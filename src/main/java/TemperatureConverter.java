@@ -1,6 +1,11 @@
 
 public class TemperatureConverter {
 
+    public static void main(String[] args) {
+        TemperatureConverter converter = new TemperatureConverter();
+        System.out.println(converter.fahrenheitToCelsius(32));
+    }
+
     public double fahrenheitToCelsius(double fahrenheit) {
         return (fahrenheit - 32) * 5 / 9;
     }
