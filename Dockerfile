@@ -1,9 +1,12 @@
-FROM maven:3.9.4-eclipse-temurin-17 AS builder
+FROM maven:3.9.6-eclipse-temurin-21
+
 LABEL authors="eemelham"
+
 WORKDIR /app
+
 COPY pom.xml .
+COPY src ./src
 
-COPY . /app
+RUN mvn clean package
 
-RUN mvn package
-CMD ["java", "-jar", "TemperatureConverter-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/TempConverter-1.0-SNAPSHOT.jar"]
