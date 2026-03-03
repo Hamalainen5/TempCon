@@ -32,16 +32,6 @@ pipeline {
             }
         }
 
-        stage('Publish Coverage Report') {
-            steps {
-                recordCoverage(
-                    tools: [
-                        jacoco(pattern: '**/target/site/jacoco/jacoco.xml')
-                    ]
-                )
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
