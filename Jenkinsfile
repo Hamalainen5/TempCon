@@ -6,6 +6,7 @@ pipeline {
     }
 
     environment {
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
         DOCKERHUB_REPO = 'eemelham/tempcon'
         DOCKER_IMAGE_TAG = 'latest'
@@ -15,25 +16,13 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/Hamalainen5/TempCon.git'
+                git branch: "main", url: 'https://github.com/Hamalainen5/TempCon.git'
             }
         }
 
-        stage('Compile') {
+        stage('Build, Test & Coverage') {
             steps {
-                bat 'mvn clean compile'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('Generate Code Coverage') {
-            steps {
-                bat 'mvn jacoco:report'
+                bat 'mvn clean verify'
             }
         }
 
@@ -45,7 +34,11 @@ pipeline {
 
         stage('Publish Coverage Report') {
             steps {
-                jacoco()
+                recordCoverage(
+                    tools: [
+                        jacoco(pattern: '**/target/site/jacoco/jacoco.xml')
+                    ]
+                )
             }
         }
 
@@ -66,7 +59,6 @@ pipeline {
                 }
             }
         }
-
     }
 
     post {
